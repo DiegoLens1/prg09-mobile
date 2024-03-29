@@ -1,16 +1,19 @@
-import { createMaterialBottomTabNavigator } from 'react-native-paper/react-navigation';
-import AllRecipes from './allRecipes';
-import SavedRecipes from './savedRecipes';
-import RandomRecipe from './randomRecipe';
+import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
+import { createStackNavigator } from "@react-navigation/stack";
+import RandomStackScreen from "./randomStackScreen";
+import LocalStackScreen from "./localStackScreen";
+import SavedStackScreen from "./savedStackScreen";
 
 const Tab = createMaterialBottomTabNavigator();
+const LocalStack = createStackNavigator();
+const SavedStack = createStackNavigator();
 
 export default function TabNavigation() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Random" component={RandomRecipe} />
-      <Tab.Screen name="Local" component={AllRecipes} />
-      <Tab.Screen name="Saved" component={SavedRecipes} />
+      <Tab.Screen name="Random" component={RandomStackScreen} />
+      <Tab.Screen name="Local" component={LocalStackScreen} />
+      <Tab.Screen name="Saved" component={SavedStackScreen} />
     </Tab.Navigator>
   );
 }
