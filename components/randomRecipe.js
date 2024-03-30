@@ -22,7 +22,7 @@ export default function RandomRecipe() {
         "https://www.themealdb.com/api/json/v1/1/random.php"
       );
       const json = await response.json();
-      await formatIngredients(json.meals[0]);
+      formatIngredients(json.meals[0]);
       setRecipes(json.meals[0]);
       setIsLoaded(true);
     } catch (error) {
@@ -32,7 +32,7 @@ export default function RandomRecipe() {
   useEffect(() => {
     getRecipes();
   }, []);
-  async function formatIngredients(json) {
+  function formatIngredients(json) {
     const nameArray = [];
     const amountArray = [];
     for (i = 1; i <= 20; i++) {
@@ -69,14 +69,29 @@ export default function RandomRecipe() {
               style={{ width: "100%", height: undefined, aspectRatio: 3 / 2 }}
               defaultSource={require("../assets/icon.png")}
             />
-            <Text style={styles.recipeName}>{recipes.strMeal}</Text>
-            {ingredientNames.map((prop, key) => {
-              return <Text key={key}>{prop}</Text>;
-            })}
-            {ingredientAmount.map((prop, key) => {
-              return <Text key={key}>{prop}</Text>;
-            })}
-            <Text>{recipes.strInstructions}</Text>
+            <View style={[styles.flex1, styles.paddingH, styles.gap10]}>
+              <Text style={styles.recipeName}>{recipes.strMeal}</Text>
+              <View style={[styles.row, styles.gap10]}>
+                <Text>{recipes.strArea}</Text>
+                <Text>{recipes.strCategory}</Text>
+              </View>
+              <Text>{recipes.strTags}</Text>
+              <Text style={styles.headers}>Ingedients</Text>
+              <View style={styles.ingredientWrapper}>
+                <View>
+                  {ingredientAmount.map((prop, key) => {
+                    return <Text key={key}>{prop}</Text>;
+                  })}
+                </View>
+                <View>
+                  {ingredientNames.map((prop, key) => {
+                    return <Text key={key}>{prop}</Text>;
+                  })}
+                </View>
+              </View>
+              <Text style={styles.headers}>Instructions</Text>
+              <Text>{recipes.strInstructions}</Text>
+            </View>
           </ScrollView>
           <Pressable
             style={styles.bottomContainer}
@@ -96,8 +111,11 @@ export default function RandomRecipe() {
 const styles = StyleSheet.create({
   recipeName: {
     fontWeight: "bold",
+    fontSize: 50,
+  },
+  headers: {
+    fontWeight: "bold",
     fontSize: 30,
-    paddingHorizontal: 10,
   },
   bottomContainer: {
     justifyContent: "flex-end",
@@ -107,6 +125,19 @@ const styles = StyleSheet.create({
   },
   flex1: {
     flex: 1,
+  },
+  paddingH: {
+    paddingHorizontal: 10,
+  },
+  ingredientWrapper: {
+    flexDirection: "row",
+    gap: 20,
+  },
+  row: {
+    flexDirection: "row",
+  },
+  gap10: {
+    gap: 10,
   },
   test: {
     flex: 1,
