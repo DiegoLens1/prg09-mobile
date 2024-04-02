@@ -10,10 +10,11 @@ export default function LocalRecipes() {
     const getRecipes = async () => {
       try {
         const response = await fetch(
-          "https://www.themealdb.com/api/json/v1/1/search.php?f=a"
+          "https://www.themealdb.com/api/json/v1/1/search.php?f=b"
         );
         const json = await response.json();
         setRecipes(json);
+        console.log(json.meals)
       } catch (error) {
         console.error(error);
       }
@@ -27,7 +28,7 @@ export default function LocalRecipes() {
           // <Text>{recipes.meals[1].strMeal}</Text>
           <FlatList
             data={recipes.meals}
-            renderItem={({ item }) => <RecipeListRenderItem data={item} />}
+            renderItem={({ item }) => <RecipeListRenderItem data={item} navTarget={'Local recipe'}/>}
           />
         )}
       </View>

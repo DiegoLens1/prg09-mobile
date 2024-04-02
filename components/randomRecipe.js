@@ -7,15 +7,17 @@ import {
   Text,
   View,
   ScrollView,
+  RefreshControl,
 } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RandomRecipe() {
   const [recipes, setRecipes] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [ingredientNames, setIngredientNames] = useState([]);
   const [ingredientAmount, setIngredientAmount] = useState([]);
+  const [saved, setSaved] = useState([]);
   const getRecipes = async () => {
     try {
       const response = await fetch(
@@ -24,14 +26,54 @@ export default function RandomRecipe() {
       const json = await response.json();
       formatIngredients(json.meals[0]);
       setRecipes(json.meals[0]);
-      setIsLoaded(true);
+      checkStorage();
+      setIsLoaded(false);
     } catch (error) {
       console.error(error);
     }
   };
+
   useEffect(() => {
     getRecipes();
   }, []);
+
+  const saveRecipe = async () => {
+    try {
+      const json = JSON.stringify(recipes);
+      await AsyncStorage.setItem(recipes.idMeal, json);
+      setSaved(true)
+    } catch (e) {
+      console.log("bruh");
+    }
+    console.log("saved");
+  };
+
+  const checkStorage = async () => {
+    if (!recipes.idMeal){
+      return
+    }
+    try {
+      const json = await AsyncStorage.getItem(recipes.idMeal);
+      if (json !== null) {
+        setSaved(true);
+      } else {
+        setSaved(false);
+      }
+    } catch (e) {
+      console.log("bruh");
+    }
+  };
+
+  const removeSavedRecipe = async () => {
+    try {
+      await AsyncStorage.removeItem(recipes.idMeal);
+      setSaved(false)
+    } catch (e) {
+      console.log("bruh");
+    }
+    console.log("removed");
+  };
+
   function formatIngredients(json) {
     const nameArray = [];
     const amountArray = [];
@@ -44,26 +86,25 @@ export default function RandomRecipe() {
       nameArray.push(json[nameString]);
       amountArray.push(json[amountString]);
     }
-    setIngredientNames([...ingredientNames, ...nameArray]);
-    setIngredientAmount([...ingredientAmount, ...amountArray]);
+    setIngredientNames([...nameArray]);
+    setIngredientAmount([...amountArray]);
   }
-  if (!isLoaded) {
-    return (
-      <View style={styles.flex1}>
-        <View style={styles.test}>
-          <ActivityIndicator size={"large"} />
-        </View>
-        <Pressable style={styles.bottomContainer}>
-          <Text>Save recipe</Text>
-        </Pressable>
-      </View>
-    );
-  }
+
+  // if (!isLoaded) {
+  //   return (
+  //     <View style={styles.flex1}>
+  //       <View style={styles.test}>
+  //         <ActivityIndicator size={"large"} />
+  //       </View>
+  //     </View>
+  //   );
+  // }
+
   return (
     <React.Fragment>
       {recipes && (
         <SafeAreaView style={styles.flex1}>
-          <ScrollView style={styles.flex1}>
+          <ScrollView style={styles.flex1} refreshControl={<RefreshControl refreshing={isLoaded} onRefresh={getRecipes}/>}>
             <Image
               source={{ uri: recipes.strMealThumb }}
               style={{ width: "100%", height: undefined, aspectRatio: 3 / 2 }}
@@ -93,15 +134,25 @@ export default function RandomRecipe() {
               <Text>{recipes.strInstructions}</Text>
             </View>
           </ScrollView>
-          <Pressable
-            style={styles.bottomContainer}
-            onPress={() => {
-              getRecipes();
-              setIsLoaded(false);
-            }}
-          >
-            <Text>Save recipe</Text>
-          </Pressable>
+          {!saved ? (
+            <Pressable
+              style={styles.bottomContainer}
+              onPress={() => {
+                saveRecipe();
+              }}
+            >
+              <Text>Save recipe</Text>
+            </Pressable>
+          ) : (
+            <Pressable
+              style={styles.bottomContainer}
+              onPress={() => {
+                removeSavedRecipe()
+              }}
+            >
+              <Text>Remove recipe</Text>
+            </Pressable>
+          )}
         </SafeAreaView>
       )}
     </React.Fragment>
@@ -111,7 +162,7 @@ export default function RandomRecipe() {
 const styles = StyleSheet.create({
   recipeName: {
     fontWeight: "bold",
-    fontSize: 50,
+    fontSize: 30,
   },
   headers: {
     fontWeight: "bold",
