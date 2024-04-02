@@ -90,16 +90,6 @@ export default function RandomRecipe() {
     setIngredientAmount([...amountArray]);
   }
 
-  // if (!isLoaded) {
-  //   return (
-  //     <View style={styles.flex1}>
-  //       <View style={styles.test}>
-  //         <ActivityIndicator size={"large"} />
-  //       </View>
-  //     </View>
-  //   );
-  // }
-
   return (
     <React.Fragment>
       {recipes && (
