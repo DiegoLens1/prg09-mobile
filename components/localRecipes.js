@@ -8,13 +8,13 @@ export default function LocalRecipes() {
   const [recipes, setRecipes] = useState([]);
   useEffect(() => {
     const getRecipes = async () => {
+      //fetch data from api and sets it in state.
       try {
         const response = await fetch(
           "https://www.themealdb.com/api/json/v1/1/search.php?f=b"
         );
         const json = await response.json();
         setRecipes(json);
-        console.log(json.meals)
       } catch (error) {
         console.error(error);
       }
@@ -25,7 +25,6 @@ export default function LocalRecipes() {
     <React.Fragment>
       <View style={styles.mainContainer}>
         {recipes && (
-          // <Text>{recipes.meals[1].strMeal}</Text>
           <FlatList
             data={recipes.meals}
             renderItem={({ item }) => <RecipeListRenderItem data={item} navTarget={'Local recipe'}/>}

@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import SavedRecipes from "./savedRecipes";
-import SavedRecipe from "./savedRecipe";
+import SavedRecipes from "../savedRecipes";
+import SavedRecipe from "../savedRecipe";
 
 const SavedStack = createStackNavigator();
 

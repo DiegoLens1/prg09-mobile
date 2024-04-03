@@ -2,10 +2,10 @@ import { useNavigation } from "@react-navigation/native";
 import * as React from "react";
 import { Text, Image, Pressable, StyleSheet, View } from "react-native";
 
-export default function RecipeListRenderItem({ data, navTarget }) {
+export default function RecipeListRenderItem({ data, navTarget, getRecipes }) {
   const navigation = useNavigation();
   return (
-    <Pressable style={styles.listItemWrapper} onPress={() => navigation.navigate(navTarget, {data})}>
+    <Pressable style={styles.listItemWrapper} onPress={() => navigation.navigate(navTarget, {data, getRecipes})}>
       <Image
         source={{ uri: data.strMealThumb + "/preview" }}
         style={{

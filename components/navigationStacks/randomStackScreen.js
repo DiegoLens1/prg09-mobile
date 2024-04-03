@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import RandomRecipe from "./randomRecipe";
+import RandomRecipe from "../randomRecipe";
 
 const RandomStack = createStackNavigator();
 

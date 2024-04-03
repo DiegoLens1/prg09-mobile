@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import LocalRecipes from "./localRecipes";
-import LocalRecipe from "./localRecipe";
+import LocalRecipes from "../localRecipes";
+import LocalRecipe from "../localRecipe";
 
 const LocalStack = createStackNavigator();
 

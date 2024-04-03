@@ -1,12 +1,9 @@
 import { createMaterialBottomTabNavigator } from "react-native-paper/react-navigation";
-import { createStackNavigator } from "@react-navigation/stack";
 import RandomStackScreen from "./randomStackScreen";
 import LocalStackScreen from "./localStackScreen";
 import SavedStackScreen from "./savedStackScreen";
 
 const Tab = createMaterialBottomTabNavigator();
-const LocalStack = createStackNavigator();
-const SavedStack = createStackNavigator();
 
 export default function TabNavigation() {
   return (
